@@ -1,9 +1,9 @@
 var http = require('http');
 var gpio = require('rpi-gpio');
 
-/* Channel:  +   g 1 2 3   4 5   6 7 8
-*       p2   * * * * * * * * * * * * *  p26
-*       p1   * * * * * * * * * * * * *  p25
+/* Channel:     g 1 2 3     4 5    6 7 8
+*       p2   * * * * * * * * * * * * * p26
+*       p1   * * * * * * * * * * * * * p25
 */
 var pins = [8, 10, 12, 16, 18, 22, 24, 26];
 var channels = [];
@@ -58,10 +58,10 @@ function shitIsGone(){
 
 function activateChannel(channel){
   channel.ready = false;
-  gpio.write(channel.pin, 0, gpiowrite);
+  gpio.write(channel.pin, 1, gpiowrite);
   setTimeout(function(){
-    gpio.write(channel.pin, 1, gpiowrite);
-  }, 1000);
+    gpio.write(channel.pin, 0, gpiowrite);
+  }, 200);
 }
 
 function gpiosetup(){
