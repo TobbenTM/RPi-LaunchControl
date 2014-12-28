@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Launch Control</string>
+    <string name="status_ready">Charge the explosives!</string>
+    <string name="status_charged">Ready to fire!</string>
+    <string name="status_empty">All explosives gone!</string>
+    <string name="status_fired">Explosives fired!</string>
+    <string name="status_failed">Misfire! Something went wrong.</string>
+    <string name="status_connecting">Connecting to server.</string>
+    <string name="status_disconnected">Unable to connect to server!</string>
+    <string name="action_fire">Fire!</string>
+
+</resources>

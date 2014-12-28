@@ -16,4 +16,5 @@ As for the ignition of the fuses; I used some 34 AWG Nichrome wire looped twice 
 
 ##Android
 
-Pretty simple Android app using standard motion sensors and AsyncHTTP. The idea behind the app is that each user has to shake their phone in order to 'charge' the tnt plunger. By pressing fire afterwards the app will send a request to http://rpi/fire.
+Pretty simple Android app using standard motion sensors and AsyncHTTP. The idea behind the app is that each user has to shake their phone in order to 'charge' the tnt plunger. By pressing fire afterwards the app will send a request to http://rpi/fire. Full source under /android. As mentioned; the only depedency is Async-HTTP (compile 'com.loopj.android:android-async-http:1.4.5'
+) from loopj.
