@@ -8,6 +8,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,7 +23,7 @@ import org.apache.http.Header;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
-    private static final String URL = "192.168.10.2";
+    private static final String URL = "http://192.168.10.2";
 
     TextView tv;
     ImageView ivPlungerBox, ivPlungerPlunger, ivCharge;
@@ -33,6 +35,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     boolean up = true;
     int c = 0; long lastts;
     AsyncHttpClient cli;
+    View.OnLongClickListener fal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +49,16 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         tv = (TextView) this.findViewById(R.id.maintext);
 
+        fal = new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                fuckall();
+                return false;
+            }
+        };
+
         ivPlungerBox = (ImageView) this.findViewById(R.id.plunger_box);
+        ivPlungerBox.setOnLongClickListener(fal);
         ivPlungerPlunger = (ImageView) this.findViewById(R.id.plunger_plunger);
         ivCharge = (ImageView) this.findViewById(R.id.charge_lvl_filled);
 
@@ -59,6 +71,23 @@ public class MainActivity extends Activity implements SensorEventListener {
         btn.setEnabled(false);
 
         cli = new AsyncHttpClient();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.reconnect:
+                connect();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -76,11 +105,21 @@ public class MainActivity extends Activity implements SensorEventListener {
     @Override
     protected void onStart(){
         super.onStart();
+        connect();
+    }
+
+    private void connect(){
         tv.setText(R.string.status_connecting);
-        cli.get(URL, new AsyncHttpResponseHandler() {
+        cli.get(URL + "/api-status", new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                tv.setText(R.string.status_ready);
+                String response = new String(responseBody);
+                if(response.contains("ready"))
+                    tv.setText(R.string.status_ready);
+                else if(response.contains("empty"))
+                    tv.setText(R.string.status_empty);
+                else
+                    tv.setText(R.string.status_unknown);
             }
 
             @Override
@@ -102,21 +141,22 @@ public class MainActivity extends Activity implements SensorEventListener {
         if(y<2&&y>-2) y=0;
         //Log.d("LAUNCH", "Diff: " + diff);
         if(up)
-            m += (y<0)?0:(y>15)?15:y;
+            m += ((y<0)?0:(y>15)?15:y);// * 4; //TODO: decr testing values
         else
-            m += (y>0)?0:(y<-15)?-15:y;
+            m += ((y>0)?0:(y<-15)?-15:y);// * 4; //TODO: decr testing values
 
         if(m>100||m<0){
             m = (m>100)?100:0;
             up = !up;
             //Log.d("LAUNCH", "Incrementing, m: " + m + ", y: " + y + ", c: " + c + ", up: " + up);
-            c++;
             cfill.setLevel(cfill.getLevel()+1266);
+            if(++c==7){
+                btn.setEnabled(true);
+                tv.setText(R.string.status_charged);
+            }
         }
 
         ivPlungerPlunger.setY(m*2.0f);
-        if(c>=7)
-            btn.setEnabled(true);
     }
 
     @Override
@@ -124,17 +164,44 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     }
 
-    public void fire(View view) {
+    private void fire(View view) {
         btn.setEnabled(false);
-        cli.get(URL + "/fire", new AsyncHttpResponseHandler() {
+        cli.get(URL + "/api-fire", new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                tv.setText(R.string.status_fired);
+                String response = new String(responseBody);
+                if(response.contains("success"))
+                    tv.setText(R.string.status_fired);
+                else if(response.contains("failed"))
+                    tv.setText(R.string.status_failed);
+                else
+                    tv.setText(R.string.status_unknown);
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                tv.setText(R.string.status_failed);
+                tv.setText(R.string.status_disconnected);
+            }
+        });
+    }
+
+    private void fuckall(){
+        btn.setEnabled(false);
+        cli.get(URL + "/api-fuckall", new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String response = new String(responseBody);
+                if(response.contains("success"))
+                    tv.setText(R.string.status_empty);
+                else if(response.contains("failed"))
+                    tv.setText(R.string.status_failed);
+                else
+                    tv.setText(R.string.status_unknown);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                tv.setText(R.string.status_disconnected);
             }
         });
     }

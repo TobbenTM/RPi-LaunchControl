@@ -9,6 +9,8 @@
     <string name="status_failed">Misfire! Something went wrong.</string>
     <string name="status_connecting">Connecting to server.</string>
     <string name="status_disconnected">Unable to connect to server!</string>
+    <string name="status_unknown">Unknown error!</string>
     <string name="action_fire">Fire!</string>
+    <string name="action_reconnect">Reconnect</string>
 
 </resources>
