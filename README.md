@@ -4,7 +4,7 @@ Fireworks Launch Control using a Raspberry Pi and Android phones.
 
 ##RPi
 
-Using node.js there is a small webserver (app.js) that currently displays which channels are ready to fire, along with some utility responses for the future Android app.
+Using node.js there is a small webserver (app.js) that currently displays which channels are ready to fire, along with a super-simple API for the Android app.
 This is simply triggering the correct GPIO pins for 200 ms at a time (see below).
 
 ##Electrical
@@ -16,5 +16,13 @@ As for the ignition of the fuses; I used some 34 AWG Nichrome wire looped twice 
 
 ##Android
 
-Pretty simple Android app using standard motion sensors and AsyncHTTP. The idea behind the app is that each user has to shake their phone in order to 'charge' the tnt plunger. By pressing fire afterwards the app will send a request to http://rpi/fire. Full source under /android. As mentioned; the only depedency is Async-HTTP (compile 'com.loopj.android:android-async-http:1.4.5'
+Pretty simple Android app using standard motion sensors and AsyncHTTP. The idea behind the app is that each user has to shake their phone in order to 'charge' the tnt plunger. Full source under /android. As mentioned; the only depedency is Async-HTTP (compile 'com.loopj.android:android-async-http:1.4.5'
 ) from loopj.
+
+##API
+
+The following commands are implemented:
+
+* /api-status - returns wether or not any fireworks are ready
+* /api-fire - fires one random firework
+* /api-fuckall - fires ALL firework
