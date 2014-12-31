@@ -72,7 +72,7 @@ function fire(){
 }
 
 function fuckall(ch){
-  if(!shitIsGone()){
+	if(ch<8){
     activateChannel(channels[ch]);
     setTimeout(fuckall, 1000, ++ch);
   }
