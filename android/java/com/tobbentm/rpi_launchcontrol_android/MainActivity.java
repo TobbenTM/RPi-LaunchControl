@@ -125,6 +125,7 @@ public class MainActivity extends Activity implements SensorEventListener {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 tv.setText(R.string.status_disconnected);
+                Log.d("LAUNCH", error.toString() + statusCode);
             }
         });
     }
@@ -164,7 +165,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     }
 
-    private void fire(View view) {
+    public void fire(View view) {
         btn.setEnabled(false);
         cli.get(URL + "/api-fire", new AsyncHttpResponseHandler() {
             @Override
@@ -181,6 +182,7 @@ public class MainActivity extends Activity implements SensorEventListener {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 tv.setText(R.string.status_disconnected);
+                Log.d("LAUNCH", error.toString() + statusCode);
             }
         });
     }
@@ -202,6 +204,7 @@ public class MainActivity extends Activity implements SensorEventListener {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 tv.setText(R.string.status_disconnected);
+                Log.d("LAUNCH", error.toString() + statusCode);
             }
         });
     }
