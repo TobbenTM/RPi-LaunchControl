@@ -2,6 +2,10 @@
 
 Fireworks Launch Control using a Raspberry Pi and Android phones.
 
+##Disclaimer
+
+None of this is safe. 
+
 ##RPi
 
 Using node.js there is a small webserver (app.js) that currently displays which channels are ready to fire, along with a super-simple API for the Android app.
@@ -25,4 +29,12 @@ The following commands are implemented:
 
 * /api-status - returns wether or not any fireworks are ready
 * /api-fire - fires one random firework
-* /api-fuckall - fires ALL firework
+* /api-fuckall - fires ALL the fireworks!
+
+##Aftermath
+
+Turned out to be a Great Success! All but two tubes detonated as people used the app. 
+
+![Complete rig](http://tobbentm.com/ul/rpilc.jpg)
+
+And documented on [video](https://www.youtube.com/watch?v=qWbJb29nAGA)! (In Norwegian though)
